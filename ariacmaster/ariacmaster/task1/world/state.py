@@ -1,3 +1,4 @@
+from datetime import datetime
 from core.ARIAC import Report
 from core.types import DoorStates, IRLocations, Testers, AGVs, AGVLocations, Cells, Slots
 
@@ -42,6 +43,8 @@ class WorldState:
         self.AGV2Location: AGVLocations = "Inspection"
         self.AGV3Location: AGVLocations = "Inspection"
 
+        self.startTime: datetime = datetime.now()
+        
     def __str__(self):
         return (
             f"Inspection Door: {self.InspectionDoor}\n"

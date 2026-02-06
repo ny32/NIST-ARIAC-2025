@@ -14,9 +14,6 @@ def tick_tree(tree, num_ticks=1, delay=0.5):
         # Show WORLD state BEFORE tick
         print(f"WORLD: {WORLD}")
 
-        # Tick the tree
-        tree.tick_once()
-
         # Show tree state AFTER tick
         print(f"\nTree Status: {tree.status}")
         print(py_trees.display.unicode_tree(root=tree, show_status=True))
@@ -30,4 +27,4 @@ if __name__ == "__main__":
     # Keep initialized conditions
 
     # Run until lane change completes
-    tick_tree(tree, num_ticks=3, delay=1)
+    tick_tree(tree, num_ticks=10, delay=2)

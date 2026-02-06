@@ -15,7 +15,7 @@ class IR1MoveToPickup(py_trees.behaviour.Behaviour):
             WORLD.IR1Location = "Conveyor"
             WORLD.IR1Free = True
             self.feedback_message = "IR1 reached Conveyor"
-        return py_trees.common.Status.FAILURE
+        return py_trees.common.Status.SUCCESS
     
 class IR1GraspCell(py_trees.behaviour.Behaviour):
     def __init__(self, name="IR1GraspCell"):

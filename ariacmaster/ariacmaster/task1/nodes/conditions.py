@@ -1,6 +1,7 @@
 import py_trees
 from main import WORLD
-from core.constants import NORMAL_CELL_VOLTAGE, ALLOWED_VOLTAGE_TOLERANCE
+from core.constants import COMPETITION_DURATION, NORMAL_CELL_VOLTAGE, ALLOWED_VOLTAGE_TOLERANCE
+from datetime import datetime, timedelta
 
 class DefectFound(py_trees.behaviour.Behaviour):
     # Checks if a defect was found in the report
@@ -87,3 +88,13 @@ class AssemblyAGVSlotsEmpty(py_trees.behaviour.Behaviour):
                         self.feedback_message = f"AGV {x+1} at Assembly is not empty."
                         return py_trees.common.Status.FAILURE
                 return py_trees.common.Status.SUCCESS
+            
+class CompetitionEnded(py_trees.behaviour.Behaviour):
+    # Check if the competition has ended (for example, after a certain time limit)
+    def __init__(self, name="Check if Competition Ended"):
+        super().__init__(name)
+    def update(self):
+        if datetime.now() - WORLD.startTime >= timedelta(minutes=COMPETITION_DURATION):
+            self.feedback_message = "Competition has ended."
+            return py_trees.common.Status.SUCCESS
+        return py_trees.common.Status.FAILURE
