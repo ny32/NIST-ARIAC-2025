@@ -52,7 +52,8 @@ class MoveAGVToAssembly(py_trees.behaviour.Behaviour):
             self.feedback_message = f"Moving AGV {WORLD.AGVAtIntersection} to Assembly Station"
             time.sleep(2) # Simulate movement time
             self.feedback_message = f"AGV {WORLD.AGVAtIntersection} reached Assembly Station"
-            WORLD.AGVs[WORLD.AGVAtIntersection - 1][1] = "Assembly"
+            x = WORLD.AGVAtIntersection - 1
+            WORLD.AGVs[x][1] = "Assembly"
             WORLD.AGVAtIntersection = -1 # Reset
             return py_trees.common.Status.SUCCESS
         return py_trees.common.Status.FAILURE

@@ -15,7 +15,8 @@ class WorldState:
 
         self.IR2Free: bool = True
         self.IR2Grasping: bool = False
-        self.IR2Location: IRLocations = "Conveyor"
+        # self.IR2Location: IRLocations = "Conveyor"
+        self.IR2Location = "Conveyor"
         self.IR2TargetCell: Cells = "None"
 
         self.FreeTesters: Testers = "Both"
@@ -26,8 +27,8 @@ class WorldState:
         self.filledAGV: int = -1
         self.AGVAtIntersection: int = -1
 
-        self.AGVs: list[list[int, AGVLocations]] = [
-            [0, "Inspection"], # AGV 1
+        self.AGVs: list[list] = [
+            [3, "Inspection"], # AGV 1
             [0, "Inspection"], #AGV 2
             [0, "Inspection"] # AGV 3
         ]
@@ -43,7 +44,8 @@ class WorldState:
             f"Inspection Robot 2 Location: {self.IR2Location}\n"
             f"Cells Queued for Inspection: {self.cellsQueued}\n"
             f"-------------------------------------------\n"
-            f"Cells Disposed/Kitted: {self.cellsDisposed}/{self.cellsKitted}"
+            f"Cells Disposed: {self.cellsDisposed}\n"
+            f"Cells Kitted: {self.cellsKitted}\n"
         )
 
 

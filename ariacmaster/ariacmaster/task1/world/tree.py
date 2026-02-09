@@ -26,7 +26,7 @@ def create():
 
     inspection = py_trees.composites.Sequence(
         name="Inspection",
-        memory=False
+        memory=True
     )
 
     cell_check = py_trees.composites.Selector(
@@ -36,7 +36,7 @@ def create():
 
     conveyor_pickup = py_trees.composites.Sequence(
         name="Conveyor Pickup",
-        memory=False
+        memory=True
     )
 
     wait_for_queue = py_trees.composites.Selector(
@@ -66,7 +66,7 @@ def create():
 
     voltage_inspection = py_trees.composites.Sequence(
         name="Voltage Inspection",
-        memory=False
+        memory=True
     )
 
     check_testers_and_wait = py_trees.composites.Selector(
@@ -111,7 +111,7 @@ def create():
 
     get_agv_to_assembly = py_trees.composites.Sequence(
         name="Get AGV to Assembly",
-        memory=False
+        memory=True
     )
 
     yield_to_assembly_agv = py_trees.composites.Sequence(

@@ -149,20 +149,13 @@ class IR2MoveToAGVSlot(py_trees.behaviour.Behaviour):
         super().__init__(name)
     def update(self):
         if WORLD.IR2Grasping and (WORLD.IR2Location == "Tester 1" or WORLD.IR2Location == "Tester 2"):
-            agv_idx = WORLD.FreeAGVSlot[0]
-            slot_idx = WORLD.FreeAGVSlot[1]
-            self.feedback_message = f"IR2 moving to AGV {agv_idx + 1}, targeting slot #{slot_idx}"
+            self.feedback_message = f"IR2 moving to empty AGV"
             time.sleep(2)  # Simulate movement time
-            agv_num = agv_idx + 1
-            if agv_num == 1:
-                WORLD.IR2Location = "AGV 1"
-                self.feedback_message = "IR2 reached AGV 1"
-            elif agv_num == 2:
-                WORLD.IR2Location = "AGV 2"
-                self.feedback_message = "IR2 reached AGV 2"
-            else:  # AGV 3
-                WORLD.IR2Location = "AGV 3"
-                self.feedback_message = "IR2 reached AGV 3"                
+            for x in range(0, 3):
+                if WORLD.AGVs[x][1] == "Assembly" and WORLD.AGVs[x][0] < 4:
+                    WORLD.IR2Location = f"AGV {x+1}"
+                    self.feedback_message = f"IR2 reached AGV {x+1}"
+                    return py_trees.common.Status.SUCCESS               
             return py_trees.common.Status.SUCCESS
         return py_trees.common.Status.FAILURE
 
@@ -170,16 +163,28 @@ class IR2PlaceInSlot(py_trees.behaviour.Behaviour):
     def __init__(self, name="IR2 places cell into slot"):
         super().__init__(name)
     def update(self):
-        if WORLD.IR2Grasping and (WORLD.IR2Location == "AGV 1" or WORLD.IR2Location == "AGV 2" or WORLD.IR2Location == "AGV 3"):
-            time.sleep(0.5) # Simulate placing into slot
-            agv_idx = WORLD.FreeAGVSlot[0]
-            slot_idx = WORLD.FreeAGVSlot[1]
-            self.feedback_message = f"Placing into AGV {agv_idx + 1}, Slot {slot_idx}"
-            # Mark the slot as filled with 'X'
-            WORLD.AGVSlots[agv_idx][slot_idx] = "X"
-            WORLD.IR2Grasping = False # Releases Cell
-            WORLD.IR2Free = True #IR2 is done with step
-            return py_trees.common.Status.SUCCESS
+        if WORLD.IR2Grasping:
+            if WORLD.IR2Location == "AGV 1":
+                self.feedback_message = "Placing into AGV 1"
+                time.sleep(0.5) # Simulate placing into slot
+                WORLD.AGVs[0][0] += 1 # Increment slot count for AGV 1
+                WORLD.IR2Grasping = False # Releases Cell
+                WORLD.IR2Free = True #IR2 is done with step
+                return py_trees.common.Status.SUCCESS
+            elif WORLD.IR2Location == "AGV 2":
+                self.feedback_message = "Placing into AGV 2"
+                time.sleep(0.5) # Simulate placing into slot
+                WORLD.AGVs[1][0] += 1 # Increment slot count for AGV 2
+                WORLD.IR2Grasping = False # Releases Cell
+                WORLD.IR2Free = True #IR2 is done with step
+                return py_trees.common.Status.SUCCESS
+            elif WORLD.IR2Location == "AGV 3":
+                self.feedback_message = "Placing into AGV 3"
+                time.sleep(0.5) # Simulate placing into slot
+                WORLD.AGVs[2][0] += 1 # Increment slot count for AGV 3
+                WORLD.IR2Grasping = False # Releases Cell
+                WORLD.IR2Free = True #IR2 is done with step
+                return py_trees.common.Status.SUCCESS
         return py_trees.common.Status.FAILURE
 
 # -------------------------------------------------------------------------------------
