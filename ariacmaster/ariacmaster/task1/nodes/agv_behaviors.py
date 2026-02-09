@@ -1,6 +1,6 @@
 import py_trees
 import time
-from main import WORLD
+from world.context import WORLD
 
 
 class FindNearestFreeAGVSlot(py_trees.behaviour.Behaviour):
@@ -8,63 +8,32 @@ class FindNearestFreeAGVSlot(py_trees.behaviour.Behaviour):
         super().__init__(name)
     
     def update(self):
-        for AGV in range(0,3):
-            for Slot in range(0, 4):
-                if WORLD.AGVSlots[AGV][Slot] != "X":
-                    WORLD.FreeAGVSlot = [AGV, Slot]
-                    self.feedback_message = f"Found available slot {Slot} on AGV {AGV}."
-                    return py_trees.common.Status.SUCCESS
-        self.feedback_message = "No available AGV slots at this time."
-        return py_trees.common.Status.FAILURE
+        self.feedback_message = f"Found available slot on AGV {WORLD.filledAGV}."
+        return py_trees.common.Status.SUCCESS
 
 class LocateFilledInspectionAGVs(py_trees.behaviour.Behaviour):
     def __init__(self, name="Check if Inspection AGVs have filled slots"):
         super().__init__(name)
     def update(self):
-        for AGV in range(0, 3):
-            slotsFilled = True
-            for slots in range (0, 4):
-                if WORLD.AGVSlots[slots] != "X":
-                    slotsFilled = False
-                    break
-            if slotsFilled:
-                match AGV:
-                    case 0:
-                        AGVName = "AGV 1"
-                    case 1:
-                        AGVName = "AGV 2"
-                    case 2:
-                        AGVName = "AGV 3"
-                if AGVName not in WORLD.filledAGVs:
-                    WORLD.filledAGVs.append(AGVName)
-                    self.feedback_message = f"{AGVName} is filled and ready to move."
-        return py_trees.common.Status.SUCCESS
+        for x in range(0, 3):
+            if WORLD.AGVs[x][0] == 4:
+                self.feedback_message = f"AGV {x+1} has all slots filled."
+                WORLD.filledAGV = x + 1
+                return py_trees.common.Status.SUCCESS
+        return py_trees.common.Status.FAILURE
 
 class MoveAGVsToIntersection(py_trees.behaviour.Behaviour):
     def __init__(self, name="Move filled AGVs to intersection"):
         super().__init__(name)
     def update(self):
-        for AGV in WORLD.filledAGVs:
-            match AGV:
-                case "AGV 1":
-                    if WORLD.AGV1Location != "Intersection":
-                        self.feedback_message = "Moving AGV 1 to Intersection"
-                        time.sleep(2)
-                        WORLD.AGV1Location = "Intersection"
-                        self.feedback_message = "AGV 1 reached Intersection"
-                case "AGV 2":
-                    if WORLD.AGV2Location != "Intersection":
-                        self.feedback_message = "Moving AGV 2 to Intersection"
-                        time.sleep(2)
-                        WORLD.AGV2Location = "Intersection"
-                        self.feedback_message = "AGV 2 reached Intersection"
-                case "AGV 3":
-                    if WORLD.AGV3Location != "Intersection":
-                        self.feedback_message = "Moving AGV 3 to Intersection"
-                        time.sleep(2)
-                        WORLD.AGV3Location = "Intersection"
-                        self.feedback_message = "AGV 3 reached Intersection"
-        return py_trees.common.Status.SUCCESS
+        if WORLD.filledAGV != -1:
+            self.feedback_message = f"Moving AGV {WORLD.filledAGV} to Intersection"
+            time.sleep(2) # Simulate movement time
+            self.feedback_message = f"AGV {WORLD.filledAGV} reached Intersection"
+            WORLD.AGVAtIntersection = WORLD.filledAGV
+            WORLD.filledAGV = -1 # Reset
+            return py_trees.common.Status.SUCCESS
+        return py_trees.common.Status.FAILURE
 
 class Wait1Sec(py_trees.behaviour.Behaviour):
     def __init__(self, name="Wait 1 Second"):
@@ -79,62 +48,37 @@ class MoveAGVToAssembly(py_trees.behaviour.Behaviour):
     def __init__(self, name="Move AGV to Assembly Station"):
         super().__init__(name)
     def update(self):
-        for AGV in WORLD.filledAGVs:
-            match AGV:
-                case "AGV 1":
-                    if WORLD.AGV1Location == "Intersection":
-                        self.feedback_message = "Moving AGV 1 to Assembly Station"
-                        # Simulate movement time and progress
-                        self.feedback_message = "AGV 1 in transit..."
-                        time.sleep(2)
-                        WORLD.AGV1Location = "Assembly"
-                        self.feedback_message = "AGV 1 reached Assembly Station"
-                case "AGV 2":
-                    if WORLD.AGV2Location == "Intersection":
-                        self.feedback_message = "Moving AGV 2 to Assembly Station"
-                        self.feedback_message = "AGV 2 in transit..."
-                        time.sleep(2)
-                        WORLD.AGV2Location = "Assembly"
-                        self.feedback_message = "AGV 2 reached Assembly Station"
-                case "AGV 3":
-                    if WORLD.AGV3Location == "Intersection":
-                        self.feedback_message = "Moving AGV 3 to Assembly Station"
-                        self.feedback_message = "AGV 3 in transit..."
-                        time.sleep(2)
-                        WORLD.AGV3Location = "Assembly"
-                        self.feedback_message = "AGV 3 reached Assembly Station"
-        return py_trees.common.Status.SUCCESS
+        if WORLD.AGVAtIntersection != -1:
+            self.feedback_message = f"Moving AGV {WORLD.AGVAtIntersection} to Assembly Station"
+            time.sleep(2) # Simulate movement time
+            self.feedback_message = f"AGV {WORLD.AGVAtIntersection} reached Assembly Station"
+            WORLD.AGVs[WORLD.AGVAtIntersection - 1][1] = "Assembly"
+            WORLD.AGVAtIntersection = -1 # Reset
+            return py_trees.common.Status.SUCCESS
+        return py_trees.common.Status.FAILURE
 class MoveAssemblyAGVToInspection(py_trees.behaviour.Behaviour):
     def __init__(self, name="Move Assembly AGV to Inspection Station"):
         super().__init__(name)
     def update(self):
-        agv_locations = [WORLD.AGV1Location, WORLD.AGV2Location, WORLD.AGV3Location]
-        for x in range(0,3):
-            if agv_locations[x] == "Assembly":
-                self.feedback_message = f"Moving AGV {x+1} to Inspection Station"
+        for x in range(0, 3):
+            if WORLD.AGVs[x][1] == "Assembly" and WORLD.AGVs[x][0] == 0:
+                self.feedback_message = f"Moving AGV {x+1} back to Inspection Station"
                 time.sleep(2) # Simulate movement time
-                # Bypasses intersection because all vehicles will yield to assembly vehicles
-                match x:
-                    case 0:
-                        WORLD.AGV1Location = "Inspection"
-                    case 1:
-                        WORLD.AGV2Location = "Inspection"
-                    case 2:
-                        WORLD.AGV3Location = "Inspection"
+                WORLD.AGVs[x][1] = "Inspection"
                 self.feedback_message = f"AGV {x+1} reached Inspection Station"
-        return py_trees.common.Status.SUCCESS
+                return py_trees.common.Status.SUCCESS
+        return py_trees.common.Status.FAILURE
 
 class UnloadAssemblyAGV(py_trees.behaviour.Behaviour):
     def __init__(self, name="Unload AGV at Assembly Station"):
         super().__init__(name)
     def update(self):
-        agv_locations = [WORLD.AGV1Location, WORLD.AGV2Location, WORLD.AGV3Location]
         unloaded = False
         for x in range(0, 3):
-            if agv_locations[x] == "Assembly":
+            if WORLD.AGVs[x][1] == "Assembly":
                 self.feedback_message = f"Unloading AGV {x+1} at Assembly Station"
                 time.sleep(2)
-                WORLD.AGVSlots[x] = [" ", " ", " ", " "]
+                WORLD.AGVs[x][0] = 0 # Clear AGV slots
                 self.feedback_message = f"AGV {x+1} unloaded and ready for new cells"
                 WORLD.cellsKitted += 4
                 unloaded = True

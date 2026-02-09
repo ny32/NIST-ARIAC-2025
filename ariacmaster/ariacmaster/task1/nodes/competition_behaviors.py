@@ -1,6 +1,5 @@
 import py_trees
 import time
-
 class StartCompetition(py_trees.behaviour.Behaviour):
     # Starts the competition
     def __init__(self, name="Start Competition"):

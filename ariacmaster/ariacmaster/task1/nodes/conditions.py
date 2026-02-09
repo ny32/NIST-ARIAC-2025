@@ -1,5 +1,5 @@
 import py_trees
-from main import WORLD
+from world.context import WORLD
 from core.constants import COMPETITION_DURATION, NORMAL_CELL_VOLTAGE, ALLOWED_VOLTAGE_TOLERANCE
 from datetime import datetime, timedelta
 
@@ -66,9 +66,9 @@ class AGVAtAssembly(py_trees.behaviour.Behaviour):
     def __init__(self, name="Check if any AGV is at Assembly Station"):
         super().__init__(name)
     def update(self):
-        if (WORLD.AGV1Location == "Assembly" or
-            WORLD.AGV2Location == "Assembly" or
-            WORLD.AGV3Location == "Assembly"):
+        if (WORLD.AGVs[0][1] == "Assembly" or
+            WORLD.AGVs[1][1] == "Assembly" or
+            WORLD.AGVs[2][1] == "Assembly"):
             self.feedback_message = "An AGV is at the Assembly Station."
             return py_trees.common.Status.SUCCESS
         else:
@@ -80,13 +80,11 @@ class AssemblyAGVSlotsEmpty(py_trees.behaviour.Behaviour):
     def __init__(self, name="Check for empty slots in AGVs at Assembly Station"):
         super().__init__(name)
     def update(self):
-        agv_locations = [WORLD.AGV1Location, WORLD.AGV2Location, WORLD.AGV3Location]
         for x in range(0,3):
-            if agv_locations[x] == "Assembly":
-                for slot in WORLD.AGVSlots[x]:
-                    if slot != " ":
-                        self.feedback_message = f"AGV {x+1} at Assembly is not empty."
-                        return py_trees.common.Status.FAILURE
+            if WORLD.AGVs[x][1] == "Assembly":
+                if WORLD.AGVs[x][0] != 0:
+                    self.feedback_message = f"AGV {x+1} at Assembly is not empty."
+                    return py_trees.common.Status.FAILURE
                 self.feedback_message = f"AGV {x+1} at Assembly has all slots empty."
                 return py_trees.common.Status.SUCCESS
         # No AGV found at the Assembly station

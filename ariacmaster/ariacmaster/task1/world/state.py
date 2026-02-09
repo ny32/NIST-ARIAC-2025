@@ -23,37 +23,27 @@ class WorldState:
         self.cellsKitted: int = 0
         self.cellsQueued: int = 0
         self.voltageReading: float = 0.0
-        self.FreeAGVSlot: list[int] = [0, 0]
+        self.filledAGV: int = -1
+        self.AGVAtIntersection: int = -1
 
-        self.filledAGVs: list[AGVs] = []
-
-        self.AGVSlots: list[list[Slots]] = [
-            [
-                " ", " ", " ", " "
-            ], # AGV 1
-            [
-                " ", " ", " ", " "
-            ], #AGV 2
-            [
-                " ", " ", " ", " "
-            ] # AGV 3
+        self.AGVs: list[list[int, AGVLocations]] = [
+            [0, "Inspection"], # AGV 1
+            [0, "Inspection"], #AGV 2
+            [0, "Inspection"] # AGV 3
         ]
-
-        self.AGV1Location: AGVLocations = "Inspection"
-        self.AGV2Location: AGVLocations = "Inspection"
-        self.AGV3Location: AGVLocations = "Inspection"
 
         self.startTime: datetime = datetime.now()
         
     def __str__(self):
         return (
-            f"Inspection Door: {self.InspectionDoor}\n"
-            f"Inspection Robot 1 Status: {'Free' if self.IR1Free else 'Busy'}\n"
+            f"AGV 1 Location: {self.AGVs[0][1]}\n"
+            f"AGV 2 Location: {self.AGVs[1][1]}\n"
+            f"AGV 3 Location: {self.AGVs[2][1]}\n"
             f"Inspection Robot 1 Location: {self.IR1Location}\n"
-            f"Inspection Robot 2 Status: {'Free' if self.IR2Free else 'Busy'}\n"
             f"Inspection Robot 2 Location: {self.IR2Location}\n"
+            f"Cells Queued for Inspection: {self.cellsQueued}\n"
             f"-------------------------------------------\n"
-            # f"Cells Disposed/Kitted: {self.cellsDisposed}/{self.cellsKitted}"
+            f"Cells Disposed/Kitted: {self.cellsDisposed}/{self.cellsKitted}"
         )
 
 

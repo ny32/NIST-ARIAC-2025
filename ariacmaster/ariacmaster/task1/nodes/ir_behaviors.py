@@ -1,7 +1,7 @@
 import py_trees
 import time
 import random
-from main import WORLD
+from world.context import WORLD
 
 class IR1MoveToPickup(py_trees.behaviour.Behaviour):
     def __init__(self, name="IR1MoveToPickup"):

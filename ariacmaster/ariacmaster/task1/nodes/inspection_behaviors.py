@@ -1,7 +1,7 @@
 import py_trees
 import time
 import random
-from main import WORLD
+from world.context import WORLD
 from core.ARIAC import Report
 class ConstructLIDARModel(py_trees.behaviour.Behaviour):
     # Scans the cell using LIDAR and constructs a 3D model
@@ -54,6 +54,4 @@ class OpenInspectionDoor(py_trees.behaviour.Behaviour):
         time.sleep(2)  # Simulate time taken to open door and for cell to move past
         self.feedback_message = "Cell has moved past the inspection door. Door closing..."
         time.sleep(0.2)
-        WORLD.InspectionDoor = "Closed"
-        self.feedback_message = "Inspection Door Closed."
         return py_trees.common.Status.SUCCESS

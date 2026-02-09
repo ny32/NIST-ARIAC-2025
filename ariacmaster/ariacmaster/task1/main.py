@@ -1,18 +1,18 @@
-from world.state import WorldState
 import world.tree as bt
 import py_trees
 import time
+from world.context import WORLD
 
-WORLD = WorldState()
-def tick_tree(tree, delay=0.5):
+def tick_tree(tree, _world, delay=0.5):
     """Tick the tree and display the state."""
     while tree.status != py_trees.common.Status.SUCCESS:
-        WORLD.tick_count += 1
+        _world.tick_count += 1
         print(f"\n{'─'*60}")
-        print(f"TICK {WORLD.tick_count}")
+        print(f"TICK {_world.tick_count}")
         print(f"{'─'*60}")
         # Show WORLD state BEFORE tick
-        print(f"WORLD: {WORLD}")
+        
+        print(_world)
         tree.tick_once()
 
         # Show tree state AFTER tick
@@ -24,8 +24,6 @@ def tick_tree(tree, delay=0.5):
 
 if __name__ == "__main__":
     tree = bt.create()
-
     # Keep initialized conditions
-
     # Run until lane change completes
-    tick_tree(tree)
+    tick_tree(tree, WORLD, delay=0.5)
