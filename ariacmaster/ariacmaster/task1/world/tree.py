@@ -8,13 +8,20 @@ import nodes.conditions as condition
 def create():
     # Create the behavior tree:
     # Nodes without children...
+    competition_ended = condition.CompetitionEnded()
     root = py_trees.composites.Sequence(
     name="Root",
     memory=False  # Re-evaluate from first child each tick
     )
+
+    short_circuit_comp = py_trees.composites.Selector(
+        name="Short Circuit Competition End",
+        memory=False
+        )
+
     parallel_tasks = py_trees.composites.Parallel(
         name="Parallel Tasks",
-        policy=py_trees.common.ParallelPolicy.SuccessOnSelected(children=[condition.CompetitionEnded()])
+        policy=py_trees.common.ParallelPolicy.SuccessOnAll(synchronise=False)
     )
 
     inspection = py_trees.composites.Sequence(
@@ -163,8 +170,12 @@ def create():
     # Construct full tree now
     root.add_children([
         competition.StartCompetition(),
-        parallel_tasks,
+        short_circuit_comp,
         competition.EndCompetition()
+    ])
+    short_circuit_comp.add_children([
+        competition_ended,
+        parallel_tasks
     ])
 
     parallel_tasks.add_children([
@@ -255,7 +266,8 @@ def create():
         agv.LocateFilledInspectionAGVs(),
         agv.MoveAGVsToIntersection(),
         keep_yielding,
-        agv.MoveAGVToAssembly()
+        agv.MoveAGVToAssembly(),
+        agv.UnloadAssemblyAGV()
     ])
     yield_to_assembly_agv.add_children([
         agv.Wait1Sec(),

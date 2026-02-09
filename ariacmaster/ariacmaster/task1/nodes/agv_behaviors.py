@@ -49,21 +49,20 @@ class MoveAGVsToIntersection(py_trees.behaviour.Behaviour):
                 case "AGV 1":
                     if WORLD.AGV1Location != "Intersection":
                         self.feedback_message = "Moving AGV 1 to Intersection"
-                        # Simulate movement time and progress
-                        self.feedback_message = "AGV 1 in transit..."
                         time.sleep(2)
+                        WORLD.AGV1Location = "Intersection"
                         self.feedback_message = "AGV 1 reached Intersection"
                 case "AGV 2":
                     if WORLD.AGV2Location != "Intersection":
                         self.feedback_message = "Moving AGV 2 to Intersection"
-                        self.feedback_message = "AGV 1 in transit..."
                         time.sleep(2)
+                        WORLD.AGV2Location = "Intersection"
                         self.feedback_message = "AGV 2 reached Intersection"
                 case "AGV 3":
                     if WORLD.AGV3Location != "Intersection":
                         self.feedback_message = "Moving AGV 3 to Intersection"
-                        self.feedback_message = "AGV 1 in transit..."
                         time.sleep(2)
+                        WORLD.AGV3Location = "Intersection"
                         self.feedback_message = "AGV 3 reached Intersection"
         return py_trees.common.Status.SUCCESS
 
@@ -124,3 +123,23 @@ class MoveAssemblyAGVToInspection(py_trees.behaviour.Behaviour):
                         WORLD.AGV3Location = "Inspection"
                 self.feedback_message = f"AGV {x+1} reached Inspection Station"
         return py_trees.common.Status.SUCCESS
+
+class UnloadAssemblyAGV(py_trees.behaviour.Behaviour):
+    def __init__(self, name="Unload AGV at Assembly Station"):
+        super().__init__(name)
+    def update(self):
+        agv_locations = [WORLD.AGV1Location, WORLD.AGV2Location, WORLD.AGV3Location]
+        unloaded = False
+        for x in range(0, 3):
+            if agv_locations[x] == "Assembly":
+                self.feedback_message = f"Unloading AGV {x+1} at Assembly Station"
+                time.sleep(2)
+                WORLD.AGVSlots[x] = [" ", " ", " ", " "]
+                self.feedback_message = f"AGV {x+1} unloaded and ready for new cells"
+                WORLD.cellsKitted += 4
+                unloaded = True
+        if unloaded:
+            return py_trees.common.Status.SUCCESS
+        else:
+            self.feedback_message = "No AGV at Assembly to unload"
+            return py_trees.common.Status.FAILURE

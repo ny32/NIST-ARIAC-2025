@@ -53,7 +53,7 @@ class WorldState:
             f"Inspection Robot 2 Status: {'Free' if self.IR2Free else 'Busy'}\n"
             f"Inspection Robot 2 Location: {self.IR2Location}\n"
             f"-------------------------------------------\n"
-            f"Cells Disposed/Kitted: {self.cellsDisposed}/{self.cellsKitted}"
+            # f"Cells Disposed/Kitted: {self.cellsDisposed}/{self.cellsKitted}"
         )
 
 

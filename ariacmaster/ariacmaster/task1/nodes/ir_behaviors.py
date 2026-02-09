@@ -149,13 +149,19 @@ class IR2MoveToAGVSlot(py_trees.behaviour.Behaviour):
         super().__init__(name)
     def update(self):
         if WORLD.IR2Grasping and (WORLD.IR2Location == "Tester 1" or WORLD.IR2Location == "Tester 2"):
-            self.feedback_message = f"IR2 moving to AGV {WORLD.AGVSlots[0]}, targeting slot #{WORLD.AGVSlots[1]}"
+            agv_idx = WORLD.FreeAGVSlot[0]
+            slot_idx = WORLD.FreeAGVSlot[1]
+            self.feedback_message = f"IR2 moving to AGV {agv_idx + 1}, targeting slot #{slot_idx}"
             time.sleep(2)  # Simulate movement time
-            if WORLD.AGVSlots == 1:
+            agv_num = agv_idx + 1
+            if agv_num == 1:
+                WORLD.IR2Location = "AGV 1"
                 self.feedback_message = "IR2 reached AGV 1"
-            elif WORLD.AGVSlots == 2:
+            elif agv_num == 2:
+                WORLD.IR2Location = "AGV 2"
                 self.feedback_message = "IR2 reached AGV 2"
-            else: #Logically, 3 is the only one left
+            else:  # AGV 3
+                WORLD.IR2Location = "AGV 3"
                 self.feedback_message = "IR2 reached AGV 3"                
             return py_trees.common.Status.SUCCESS
         return py_trees.common.Status.FAILURE
@@ -166,7 +172,11 @@ class IR2PlaceInSlot(py_trees.behaviour.Behaviour):
     def update(self):
         if WORLD.IR2Grasping and (WORLD.IR2Location == "AGV 1" or WORLD.IR2Location == "AGV 2" or WORLD.IR2Location == "AGV 3"):
             time.sleep(0.5) # Simulate placing into slot
-            self.feedback_message = f"Placing into AGV {WORLD.AGVSlots[0]}, Slot {WORLD.AGVSlots[1]}"
+            agv_idx = WORLD.FreeAGVSlot[0]
+            slot_idx = WORLD.FreeAGVSlot[1]
+            self.feedback_message = f"Placing into AGV {agv_idx + 1}, Slot {slot_idx}"
+            # Mark the slot as filled with 'X'
+            WORLD.AGVSlots[agv_idx][slot_idx] = "X"
             WORLD.IR2Grasping = False # Releases Cell
             WORLD.IR2Free = True #IR2 is done with step
             return py_trees.common.Status.SUCCESS

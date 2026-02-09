@@ -4,15 +4,16 @@ import py_trees
 import time
 
 WORLD = WorldState()
-def tick_tree(tree, num_ticks=1, delay=0.5):
+def tick_tree(tree, delay=0.5):
     """Tick the tree and display the state."""
-    for i in range(num_ticks):
+    while tree.status != py_trees.common.Status.SUCCESS:
         WORLD.tick_count += 1
         print(f"\n{'─'*60}")
         print(f"TICK {WORLD.tick_count}")
         print(f"{'─'*60}")
         # Show WORLD state BEFORE tick
         print(f"WORLD: {WORLD}")
+        tree.tick_once()
 
         # Show tree state AFTER tick
         print(f"\nTree Status: {tree.status}")
@@ -27,4 +28,4 @@ if __name__ == "__main__":
     # Keep initialized conditions
 
     # Run until lane change completes
-    tick_tree(tree, num_ticks=10, delay=2)
+    tick_tree(tree)

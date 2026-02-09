@@ -3,4 +3,4 @@ ALLOWED_VOLTAGE_TOLERANCE = 0.2 # NIST ARIAC - Allowed voltage tolerance for a c
 
 NORMAL_RETRIES=1000
 
-COMPETITION_DURATION = 1.5 # Competition duration in minutes
+COMPETITION_DURATION = 2 # Competition duration in minutes

@@ -87,7 +87,11 @@ class AssemblyAGVSlotsEmpty(py_trees.behaviour.Behaviour):
                     if slot != " ":
                         self.feedback_message = f"AGV {x+1} at Assembly is not empty."
                         return py_trees.common.Status.FAILURE
+                self.feedback_message = f"AGV {x+1} at Assembly has all slots empty."
                 return py_trees.common.Status.SUCCESS
+        # No AGV found at the Assembly station
+        self.feedback_message = "No AGV is currently at the Assembly Station."
+        return py_trees.common.Status.FAILURE
             
 class CompetitionEnded(py_trees.behaviour.Behaviour):
     # Check if the competition has ended (for example, after a certain time limit)
