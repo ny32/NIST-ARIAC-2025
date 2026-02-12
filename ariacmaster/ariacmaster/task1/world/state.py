@@ -6,7 +6,7 @@ class WorldState:
     def __init__(self):
         self.tick_count=0 # Counts ticks, not needed for ARIAC
 
-        self.Report: Report = Report(False, "")
+        self.Report: Report = Report(DefectType="None")
         self.InspectionDoor: DoorStates = "Closed"
 
         self.IR1Free: bool = True

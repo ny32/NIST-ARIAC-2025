@@ -69,7 +69,7 @@ def create():
         memory=True
     )
 
-    check_testers_and_wait = py_trees.composites.Selector(
+    check_testers_and_wait = py_trees.composites.Sequence(
         name="Check Testers and Wait",
         memory=False
     )
@@ -104,9 +104,9 @@ def create():
         memory=False
     )
 
-    agv_movement = py_trees.composites.Parallel(
+    agv_movement = py_trees.composites.Selector(
         name="AGV Movement",
-        policy=py_trees.common.ParallelPolicy.SuccessOnAll(synchronise=False)
+        memory=True
     )
 
     get_agv_to_assembly = py_trees.composites.Sequence(
@@ -182,7 +182,8 @@ def create():
         inspection,
         conveyor_pickup,
         voltage_inspection,
-        agv_movement
+        agv_movement,
+        condition.CompetitionEnded()
     ])
     inspection.add_children([
         inspection_node.ConstructLIDARModel(),

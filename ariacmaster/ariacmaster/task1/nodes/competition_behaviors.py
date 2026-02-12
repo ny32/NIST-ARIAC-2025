@@ -1,12 +1,13 @@
 import py_trees
 import time
+from core.constants import STARTUP_TIME
 class StartCompetition(py_trees.behaviour.Behaviour):
     # Starts the competition
     def __init__(self, name="Start Competition"):
         super().__init__(name)
     def update(self):
         self.feedback_message = "Starting competition..."
-        time.sleep(5) # Simulate delay for competition start
+        time.sleep(STARTUP_TIME) # Simulate delay for competition start
         self.feedback_message = "Competition started"
         return py_trees.common.Status.SUCCESS
     

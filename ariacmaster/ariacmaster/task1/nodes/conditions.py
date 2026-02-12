@@ -10,6 +10,7 @@ class DefectFound(py_trees.behaviour.Behaviour):
     def update(self):
         if WORLD.Report.DefectType != "None":
             self.feedback_message = f"Defect Found: {WORLD.Report.DefectType}"
+            WORLD.cellsDisposed += 1
             return py_trees.common.Status.SUCCESS
         else:
             self.feedback_message = "No Defect Found"

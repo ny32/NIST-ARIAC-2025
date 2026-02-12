@@ -1,6 +1,6 @@
 from core.types import Defects
 
 class Report:
-    def __init__(self, Status, DefectType):
-        self.Status: bool = False
-        self.DefectType: Defects = "None"
+    def __init__(self, DefectType):
+        self.Status: bool = (True if DefectType == "None" else False)
+        self.DefectType: Defects = DefectType
