@@ -55,7 +55,7 @@ class CurrentCellTolerable(py_trees.behaviour.Behaviour):
     def __init__(self, name="Check cell voltage acceptability"):
         super().__init__(name)
     def update(self):
-        if abs(WORLD.voltageReading - NORMAL_CELL_VOLTAGE) <= ALLOWED_VOLTAGE_TOLERANCE:
+        if round(abs(WORLD.voltageReading - NORMAL_CELL_VOLTAGE), 1) <= ALLOWED_VOLTAGE_TOLERANCE:
             self.feedback_message = f"Cell voltage {WORLD.voltageReading}V is within acceptable range."
             return py_trees.common.Status.SUCCESS
         else:

@@ -11,7 +11,6 @@ class ConstructLIDARModel(py_trees.behaviour.Behaviour):
 
     def update(self):
         time.sleep(1) # Time delay for cell arrival
-        self.feedback_message = "Cell Detected. Constructing model..."
         time.sleep(0.5)
         self.feedback_message = "LIDAR Model Constructed"
         return py_trees.common.Status.SUCCESS
@@ -46,12 +45,7 @@ class OpenInspectionDoor(py_trees.behaviour.Behaviour):
     def __init__(self, name="Open Inspection Door"):
         super().__init__(name)
     def update(self):
-        WORLD.InspectionDoor = "Open"
-        self.feedback_message = "Inspection Door Opening..."
-        time.sleep(0.2)
-        self.feedback_message = "Inspection Door Opened."
-        WORLD.cellsQueued += 1
         time.sleep(2)  # Simulate time taken to open door and for cell to move past
-        self.feedback_message = "Cell has moved past the inspection door. Door closing..."
-        time.sleep(0.2)
+        self.feedback_message = "Cell  moved to queue. Door closing..."
+        WORLD.cellsQueued += 1
         return py_trees.common.Status.SUCCESS

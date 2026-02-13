@@ -3,7 +3,8 @@ import core.constants as constants
 import nodes.competition_behaviors as competition
 import nodes.inspection_behaviors as inspection_node
 import nodes.agv_behaviors as agv
-import nodes.ir_behaviors as ir_node
+import nodes.inspection_robot_1 as IR1
+import nodes.inspection_robot_2 as IR2
 import nodes.conditions as condition
 def create():
     # Create the behavior tree:
@@ -196,11 +197,11 @@ def create():
         inspection_node.OpenInspectionDoor()
     ])
     conveyor_pickup.add_children([
-        ir_node.IR1MoveToPickup(),
+        IR1.MoveToPickup(),
         wait_for_cell_arrival,
-        ir_node.IR1GraspCell(),
+        IR1.GraspCell(),
         ir1_wait_for_tester,
-        ir_node.IR1PlaceInTester()
+        IR1.PlaceInTester()
     ])
     wait_for_queue.add_children([
         condition.QueuedCell(),
@@ -208,7 +209,7 @@ def create():
     ])
     wait_sequence.add_children([
         not_queued_cell,
-        ir_node.Wait1Sec()
+        IR1.Wait1Sec()
     ])
     ir1_tester_selection.add_children([
         ir1_tester1_sequence,
@@ -216,21 +217,21 @@ def create():
     ])
     ir1_tester1_sequence.add_children([
         condition.VoltageTester1Free(),
-        ir_node.IR1MoveToTester1()
+        IR1.MoveToTester1()
     ])
     ir1_tester2_sequence.add_children([
         condition.VoltageTester2Free(),
-        ir_node.IR1MoveToTester2()
+        IR1.MoveToTester2()
     ])
     voltage_inspection.add_children([
         wait_for_filled_tester,
-        ir_node.TakeCurrentCellVoltage(),
-        ir_node.IR2MoveToCurrentCell(),
-        ir_node.IR2GraspCell(),
+        competition.TakeCurrentCellVoltage(),
+        IR2.MoveToCurrentCell(),
+        IR2.GraspCell(),
         recycle_or_keep_cell_selector
     ])
     check_testers_and_wait.add_children([
-        ir_node.Wait1Sec(),
+        IR2.Wait1Sec(),
         ir2_tester_selection
     ])
     ir2_tester_selection.add_children([
@@ -239,11 +240,11 @@ def create():
     ])
     ir2_check_tester1.add_children([
         voltage_tester1_filled,
-        ir_node.setIR2TargetCellTo1()
+        IR2.setTargetCellTo1()
     ])
     ir2_check_tester2.add_children([
         voltage_tester2_filled,
-        ir_node.setIR2TargetCellTo2()
+        IR2.setTargetCellTo2()
     ])
     recycle_or_keep_cell_selector.add_children([
         take_good_cell_to_agv,
@@ -252,12 +253,12 @@ def create():
     take_good_cell_to_agv.add_children([
         condition.CurrentCellTolerable(),
         agv.FindNearestFreeAGVSlot(),
-        ir_node.IR2MoveToAGVSlot(),
-        ir_node.IR2PlaceInSlot()
+        IR2.MoveToAGVSlot(),
+        IR2.PlaceInSlot()
     ])
     dispose_bad_cell.add_children([
-        ir_node.IR2MoveToRecycling(),
-        ir_node.IR2ReleaseCell()
+        IR2.MoveToRecycling(),
+        IR2.ReleaseCell()
     ])
     agv_movement.add_children([
         get_agv_to_assembly,
