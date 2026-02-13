@@ -9,11 +9,9 @@ class IR1MoveToPickup(py_trees.behaviour.Behaviour):
 
     def update(self):
         if WORLD.IR1Location != "Conveyor":
-            WORLD.IR1Free = False
             self.feedback_message = "IR1 moving to Conveyor"
             time.sleep(2)  # Simulate movement time
             WORLD.IR1Location = "Conveyor"
-            WORLD.IR1Free = True
             self.feedback_message = "IR1 reached Conveyor"
         return py_trees.common.Status.SUCCESS
     
@@ -22,8 +20,7 @@ class IR1GraspCell(py_trees.behaviour.Behaviour):
         super().__init__(name)
 
     def update(self):
-        if WORLD.IR1Free and WORLD.IR1Location == "Conveyor":
-            WORLD.IR1Free = False
+        if WORLD.IR1Location == "Conveyor":
             if WORLD.cellsQueued > 0:
                 WORLD.cellsQueued -= 1
                 self.feedback_message = "IR1 grasping cell"
@@ -73,7 +70,6 @@ class IR1PlaceInTester(py_trees.behaviour.Behaviour):
             self.feedback_message = f"IR1 placing cell in {WORLD.IR1Location}"
             time.sleep(0.5)  # Simulate placing time
             WORLD.IR1Grasping = False
-            WORLD.IR1Free = True
             # Mark the other tester as free (this one is now occupied)
             if WORLD.IR1Location == "Tester 1":
                 WORLD.FreeTesters = "Tester 2"
