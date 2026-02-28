@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Guide &#8212; docs  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Behavior Tree" href="nodes/index.html" />
+    <link rel="prev" title="NIST ARIAC 2025 Competitor" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="guide">
+<h1>Guide<a class="headerlink" href="#guide" title="Link to this heading">¶</a></h1>
+<section id="run-instructions">
+<h2>Run Instructions<a class="headerlink" href="#run-instructions" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Update pip</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Install project dependencies</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Run main file</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>ariacmaster/ariacmaster/task1/main.py
+</pre></div>
+</div>
+</section>
+<section id="competiton-parameters">
+<h2>Competiton Parameters<a class="headerlink" href="#competiton-parameters" title="Link to this heading">¶</a></h2>
+<p><em>core/constants.py</em></p>
+<section id="normal-cell-voltage-float">
+<h3><code class="docutils literal notranslate"><span class="pre">NORMAL_CELL_VOLTAGE</span> <span class="pre">(float):</span></code><a class="headerlink" href="#normal-cell-voltage-float" title="Link to this heading">¶</a></h3>
+<blockquote>
+<div><p>Ideal cell voltage standard.</p>
+</div></blockquote>
+</section>
+<section id="allowed-voltage-tolerance-float">
+<h3><code class="docutils literal notranslate"><span class="pre">ALLOWED_VOLTAGE_TOLERANCE</span> <span class="pre">(float)</span></code>:<a class="headerlink" href="#allowed-voltage-tolerance-float" title="Link to this heading">¶</a></h3>
+<p>Allowed voltage tolerance for cells to pass.</p>
+</section>
+<section id="inspection-defect-probability-int">
+<h3><code class="docutils literal notranslate"><span class="pre">INSPECTION_DEFECT_PROBABILITY</span> <span class="pre">(int)</span></code>:<a class="headerlink" href="#inspection-defect-probability-int" title="Link to this heading">¶</a></h3>
+<p>Represents max integer bound of randomly generated number to determine if a cell is defective. Values [1, 2 3] represent defective cells. Values ≤ 3 will only spawn defective cells.</p>
+</section>
+<section id="normal-retries-int">
+<h3><code class="docutils literal notranslate"><span class="pre">NORMAL_RETRIES</span> <span class="pre">(int)</span></code>:<a class="headerlink" href="#normal-retries-int" title="Link to this heading">¶</a></h3>
+<p>Number of retry ticks of tree before failing. Recommended not to change default.</p>
+</section>
+<section id="startup-time-float">
+<h3><code class="docutils literal notranslate"><span class="pre">STARTUP_TIME</span> <span class="pre">(float)</span></code>:<a class="headerlink" href="#startup-time-float" title="Link to this heading">¶</a></h3>
+<p>Time in seconds to simulate competition start.</p>
+</section>
+<section id="competition-duration-float">
+<h3><code class="docutils literal notranslate"><span class="pre">COMPETITION_DURATION</span> <span class="pre">(float)</span></code>:<a class="headerlink" href="#competition-duration-float" title="Link to this heading">¶</a></h3>
+<p>Competition duration in minutes.</p>
+</section>
+</section>
+<section id="world-state">
+<h2>World State<a class="headerlink" href="#world-state" title="Link to this heading">¶</a></h2>
+<p><em>world/state.py</em></p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">self.tick_count</span></code> (int):</dt><dd><p>Counts ticks, incremented by 1 every tick.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.Report</span></code> (Report):</dt><dd><p>Instance of the <code class="docutils literal notranslate"><span class="pre">Report</span></code> class. Initialized with <code class="docutils literal notranslate"><span class="pre">DefectType=&quot;None&quot;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.IR1Grasping</span></code> (bool):</dt><dd><p>True if Inspection Robot 1 is currently grasping a part; False otherwise.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.IR1Location</span></code> (IRLocations):</dt><dd><p>Current location of Inspection Robot 1. Initialized to <code class="docutils literal notranslate"><span class="pre">&quot;Conveyor&quot;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.IR2Free</span></code> (bool):</dt><dd><p>True if Inspection Robot 2 is free and available to grasp a part.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.IR2Grasping</span></code> (bool):</dt><dd><p>True if Inspection Robot 2 is currently grasping a part; False otherwise.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.IR2Location</span></code> (IRLocations):</dt><dd><p>Current location of Inspection Robot 2. Initialized to <code class="docutils literal notranslate"><span class="pre">&quot;Conveyor&quot;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.IR2TargetCell</span></code> (Cells):</dt><dd><p>Target cell assigned for Inspection Robot 2. Initialized to <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.FreeTesters</span></code> (Testers):</dt><dd><p>Indicates which testers are free. Initialized to <code class="docutils literal notranslate"><span class="pre">&quot;Both&quot;</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.cellsDisposed</span></code> (int):</dt><dd><p>Number of cells disposed so far.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.cellsKitted</span></code> (int):</dt><dd><p>Number of cells successfully kitted.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.cellsQueued</span></code> (int):</dt><dd><p>Number of cells currently queued for processing.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.voltageReading</span></code> (float):</dt><dd><p>Current voltage reading of the cell under inspection.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.filledAGV</span></code> (int):</dt><dd><p>ID of the AGV that is currently filled. Initialized to <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.AGVAtIntersection</span></code> (int):</dt><dd><p>ID of the AGV currently at the intersection. Initialized to <code class="docutils literal notranslate"><span class="pre">-1</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.AGVs</span></code> (list[list]):</dt><dd><p>List of AGVs and their states. Each AGV is represented as a list:
+- First element: number of filled slots
+- Second element: position of AGV (<cite>“Inspection”</cite> or <cite>“Assembly”</cite>)</p>
+<p>Default initialization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Inspection&quot;</span><span class="p">],</span>  <span class="c1"># AGV 1 (preloaded for demo)</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Inspection&quot;</span><span class="p">],</span>  <span class="c1"># AGV 2</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Inspection&quot;</span><span class="p">]</span>   <span class="c1"># AGV 3</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">self.startTime</span></code> (datetime):</dt><dd><p>Timestamp of when the WorldState object was initialized. Initialized to <code class="docutils literal notranslate"><span class="pre">datetime.now()</span></code>.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">docs</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#run-instructions">Run Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#competiton-parameters">Competiton Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#world-state">World State</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nodes/index.html">Behavior Tree</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">NIST ARIAC 2025 Competitor</a></li>
+      <li>Next: <a href="nodes/index.html" title="next chapter">Behavior Tree</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2026, Nishanth Yeniebera.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/run_guide.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
