@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AGV Behaviors &#8212; docs  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Competition Behaviors" href="competition_behaviors.html" />
+    <link rel="prev" title="Behavior Tree" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="agv-behaviors">
+<h1>AGV Behaviors<a class="headerlink" href="#agv-behaviors" title="Link to this heading">¶</a></h1>
+<p><em>(nodes/agv_behaviors.py)</em></p>
+<div class="toctree-wrapper compound">
+</div>
+<section id="findnearestfreeagvslot">
+<h2><code class="docutils literal notranslate"><span class="pre">FindNearestFreeAGVSlot:</span></code><a class="headerlink" href="#findnearestfreeagvslot" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>Finds the nearest free slot on the closest AGV.</p>
+<dl>
+<dt>Output:</dt><dd><div class="line-block">
+<div class="line">Feedback: Closest AGV ID with a free slot</div>
+<div class="line">Success: Always</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="locatefilledinspectionagvs">
+<h2><code class="docutils literal notranslate"><span class="pre">LocateFilledInspectionAGVs:</span></code><a class="headerlink" href="#locatefilledinspectionagvs" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>Checks for AGVs with all four slots filled, and sets the <code class="docutils literal notranslate"><span class="pre">filledAGV</span> <span class="pre">(int)</span></code> to the ID of the AGV with all slots filled.</p>
+<dl>
+<dt>Output:</dt><dd><div class="line-block">
+<div class="line">Feedback: ID of AGV with all slots filled</div>
+<div class="line">Failure: No AGVs have all slots filled</div>
+<div class="line">Success: At least one AGV has all slots filled</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="moveagvstointersection">
+<h2><code class="docutils literal notranslate"><span class="pre">MoveAGVsToIntersection:</span></code><a class="headerlink" href="#moveagvstointersection" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>Moves the filled AGV to the intersection of the AGV track, sets the <code class="docutils literal notranslate"><span class="pre">filledAGV</span> <span class="pre">(int)</span></code> variable back to -1, and sets AGVATIntersection to the ID of the moved AGV.</p>
+<dl>
+<dt>Output:</dt><dd><div class="line-block">
+<div class="line">Feedback: ID of AGV that was moved to the intersection</div>
+<div class="line">Failure: There are no filled AGVs, or <code class="docutils literal notranslate"><span class="pre">filledAGV</span> <span class="pre">=</span> <span class="pre">-1</span></code></div>
+<div class="line">Success: There is a filled AGV, and it successfully makes it to the intersection</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="wait1sec">
+<h2><code class="docutils literal notranslate"><span class="pre">Wait1Sec:</span></code><a class="headerlink" href="#wait1sec" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>All active AGVs stop movement for one second.</p>
+<dl>
+<dt>Output:</dt><dd><div class="line-block">
+<div class="line">Feedback: Confirmation of completing the wait</div>
+<div class="line">Success: Always</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="moveagvtoassembly">
+<h2><code class="docutils literal notranslate"><span class="pre">MoveAGVToAssembly:</span></code><a class="headerlink" href="#moveagvtoassembly" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>Moves the AGV at the intersection to the assembly station, decrements AGVsAtIntersection (type: int) by 1, and sets the position of the AGV to Assembly.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Usage</span>
+<span class="n">WORLD</span><span class="o">.</span><span class="n">AGVs</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Assembly&quot;</span> <span class="c1"># x = ID of moved AGV</span>
+</pre></div>
+</div>
+<dl>
+<dt>Output:</dt><dd><div class="line-block">
+<div class="line">Feedback: ID of AGV that was moved to the assembly station</div>
+<div class="line">Failure: No AGVs are at the intersection</div>
+<div class="line">Success: The AGV reached the assembly station</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="moveassemblyagvtoinspection">
+<h2><code class="docutils literal notranslate"><span class="pre">MoveAssemblyAGVToInspection:</span></code><a class="headerlink" href="#moveassemblyagvtoinspection" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>Moves the AGV at the assembly station back to the inspection state and sets the position of the AGV to Inspection.</p>
+<dl>
+<dt>Output:</dt><dd><div class="line-block">
+<div class="line">Feedback: ID of AGV that reached the inspection station</div>
+<div class="line">Failure: No AGVs are at Assembly, or AGVs at Assembly do not have all slots cleared</div>
+<div class="line">Success: An empty AGV is moved from the assembly station to the inspection station</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="unloadassemblyagv">
+<h2><code class="docutils literal notranslate"><span class="pre">UnloadAssemblyAGV</span></code><a class="headerlink" href="#unloadassemblyagv" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>Clears the slots of the AGV (if present) at the assembly station and then sets the filled slots of the AGV to 0.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Usage</span>
+<span class="n">WORLD</span><span class="o">.</span><span class="n">AGVs</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># x is the ID of the moved AGV</span>
+</pre></div>
+</div>
+<dl>
+<dt>Output:</dt><dd><div class="line-block">
+<div class="line">Feedback: ID of the AGV at the assembly station that had its slots cleared</div>
+<div class="line">Failure: No AGV is at the assembly station</div>
+<div class="line">Success: The AGV at the assembly station had its slots successfully cleared</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">docs</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../run_guide.html">Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Behavior Tree</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AGV Behaviors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="competition_behaviors.html">Competition Behaviors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditions.html">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspection_behaviors.html">Inspection Behaviors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspection_robot_1.html">Inspection Robot 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspection_robot_2.html">Inspection Robot 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#overview">Overview</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Behavior Tree</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Behavior Tree</a></li>
+      <li>Next: <a href="competition_behaviors.html" title="next chapter">Competition Behaviors</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2026, Nishanth Yeniebera.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/nodes/agv_behaviors.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
