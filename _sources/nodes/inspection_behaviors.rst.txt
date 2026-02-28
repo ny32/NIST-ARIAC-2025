@@ -1,0 +1,39 @@
+Inspection Behaviors
+====================
+*nodes/inspection_behaviors.py*
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+``ConstructLIDARModel:``  
+------------------------
+    Simulates scanning the current cell using LIDAR and constructing a 3D model.
+
+    Output
+        | Feedback: "LIDAR Model Constructed"
+        | Success: Always
+
+``PopulateReport:``  
+-------------------
+    Generates a random integer between 1 and `INSPECTION_DEFECT_PROBABILITY` to simulate defect detection. Based on the generated value, a defect type ["Dent", "Scratch", "Bulge", "None"] is selected. `Report` is assigned a new `Report` object with `DefectType` equal to the selected defect.
+
+    Output
+        | Feedback: Displays detected defect type if not "None".
+        | Success: Always
+
+``SubmitReport:``  
+------------------
+    Simulates submission of the current inspection report.
+
+    Output
+        | Feedback: "Report Submitted."
+        | Success: Always
+
+``OpenInspectionDoor:``  
+-----------------------
+    Simulates opening the inspection station door and moving the cell to the queue. After the delay, `cellsQueued` is incremented by 1.
+
+    Output
+        | Feedback: "Cell moved to queue. Door closing..."
+        | Success: Always

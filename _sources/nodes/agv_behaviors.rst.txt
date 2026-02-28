@@ -1,0 +1,77 @@
+AGV Behaviors
+=============
+*(nodes/agv_behaviors.py)*
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+
+``FindNearestFreeAGVSlot:``
+---------------------------
+    Finds the nearest free slot on the closest AGV.
+    
+    Output:
+        | Feedback: Closest AGV ID with a free slot
+        | Success: Always
+
+``LocateFilledInspectionAGVs:``
+-------------------------------
+    Checks for AGVs with all four slots filled, and sets the ``filledAGV (int)`` to the ID of the AGV with all slots filled.
+    
+    Output:
+        | Feedback: ID of AGV with all slots filled
+        | Failure: No AGVs have all slots filled
+        | Success: At least one AGV has all slots filled
+
+``MoveAGVsToIntersection:``
+---------------------------
+    Moves the filled AGV to the intersection of the AGV track, sets the ``filledAGV (int)`` variable back to -1, and sets AGVATIntersection to the ID of the moved AGV.
+
+    Output:
+        | Feedback: ID of AGV that was moved to the intersection
+        | Failure: There are no filled AGVs, or ``filledAGV = -1``
+        | Success: There is a filled AGV, and it successfully makes it to the intersection
+
+``Wait1Sec:``
+--------------
+    All active AGVs stop movement for one second.
+    
+    Output:
+        | Feedback: Confirmation of completing the wait
+        | Success: Always
+
+``MoveAGVToAssembly:``
+-----------------------
+    Moves the AGV at the intersection to the assembly station, decrements AGVsAtIntersection (type: int) by 1, and sets the position of the AGV to Assembly.
+    
+    .. code-block:: python    
+    
+        # Usage
+        WORLD.AGVs[x][1] = "Assembly" # x = ID of moved AGV
+    
+    Output:
+        | Feedback: ID of AGV that was moved to the assembly station
+        | Failure: No AGVs are at the intersection
+        | Success: The AGV reached the assembly station
+
+``MoveAssemblyAGVToInspection:``
+--------------------------------
+    Moves the AGV at the assembly station back to the inspection state and sets the position of the AGV to Inspection.
+    
+    Output:
+        | Feedback: ID of AGV that reached the inspection station
+        | Failure: No AGVs are at Assembly, or AGVs at Assembly do not have all slots cleared
+        | Success: An empty AGV is moved from the assembly station to the inspection station
+``UnloadAssemblyAGV``
+----------------------
+    Clears the slots of the AGV (if present) at the assembly station and then sets the filled slots of the AGV to 0.
+    
+    .. code-block:: python
+        
+        # Usage
+        WORLD.AGVs[x][0] = 0 # x is the ID of the moved AGV
+    Output:
+        | Feedback: ID of the AGV at the assembly station that had its slots cleared
+        | Failure: No AGV is at the assembly station
+        | Success: The AGV at the assembly station had its slots successfully cleared

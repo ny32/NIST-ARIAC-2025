@@ -1,0 +1,29 @@
+Competition Behaviors
+===================
+*nodes/competition_behaviors.py*
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+``StartCompetition:``
+---------------------
+	Starts competition simulation.
+	Output
+		| Feedback: Confirmation of start.
+		| Success: Always
+	
+``EndCompetition:``
+-------------------
+	Ends competition simulation.
+	Output
+		| Feedback: Confirmation of end.
+		| Success: Always
+
+``TakeCurrentCellVoltage:``
+---------------------------
+	Gets a voltage reading (in simulation, this is done by getting a random number from 12.4 to 12.9) from an individual tester and sets voltageReading (int) equal to it.
+	Output
+		| Feedback: The voltage tester on which the reading was taken, and the voltage reading in volts.
+		| Failure: No cell in either of the voltage testers.
+		| Success: There was a cell in 1 of 2 voltage testers.
