@@ -7,6 +7,7 @@
 Below is the behavior tree structure followed in my code, each color indicates a new step(s) being handled. The nodes will run in parallel as indicated by the roots.
 
 ### For Reference:
+
 - Green is Step 1a - Physical Inspection
 - Purple is Step 1b - Conveyor Pickup
 - Blue is Step 1c & 1d - Voltage Inspection & AGV Placement
