@@ -1,0 +1,56 @@
+Behavior Tree
+=====
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+   agv_behaviors
+   competition_behaviors
+   conditions
+   inspection_behaviors
+   inspection_robot_1
+   inspection_robot_2
+
+Overview
+--------
+
+`NIST ARIAC <https://pages.nist.gov/ARIAC_docs/en/latest/index.html>`_ is a competition to test the ability of robots to perform complex manufacturing tasks in a dynamic environment.
+The simulation is a ``py_trees`` implementation of the EV battery manufacturing tasks.
+
+
+**Legend:**
+
+- Sequence Node **(⟶)**
+- Selector Node **(?)**
+- Parallel Node **(\|⟶\|)**
+- Looping Decorator **(⟳)**
+- Inverter Decorator **(!)**
+- Condition Node: **Circular Border**
+- Action Node: **Normal Borders**
+
+Below is the visualization of the behavior tree.
+
+.. image:: ../../../lib/Task1BehaviorTree.png
+   :align: center
+
+`View on Figma <https://www.figma.com/board/FQbgSewBoVZuaahuNycCL8/NIST_ARIACMASTER?node-id=0-1&p=f&t=e7GGcnD3WUBGhm5T-0>`_
+
+**Task 1: Inspection and Kit Building**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Task 1a: Physical Inspection**
+   Denoted by *green-colored* nodes in behavior tree. Physical inspection for defects is done on each cell at the 
+   inspection station and results are stored for appropriate disposal or advancement of cell.
+**Task 1b: Conveyor Pickup**
+   Denoted by *purple-colored* nodes in behavior tree. Conveyor pickup is done by inspection robot 1 and the cell is placed
+   into a voltage tester.
+
+**Task 1c: Voltage Inspection**
+   Denoted by *blue-colored* nodes in behavior tree. The voltage tester's reading is published after cell voltage inspection completes.
+
+**Task 1d: AGV Placement**
+   Denoted by *blue-colored* nodes in behavior tree. Inspection robot 2 places cells that pass into an AGV or places defective cells into the recycling bin.
+
+**Task 1e: Move AGV**
+   Denoted by *pink-colored* nodes in behavior tree. AGVs are moved to the kit assembly station for kit building once they are filled (all slots must have same cell type).

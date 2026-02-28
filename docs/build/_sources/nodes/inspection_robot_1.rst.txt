@@ -1,0 +1,59 @@
+Inspection Robot 1
+============================
+*nodes/inspection_robot_1.py*
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+
+``MoveToPickup:``  
+-----------------
+    Simulates movement to conveyor and sets `IR1Location` to "Conveyor".
+
+    Output
+        | Feedback: IR1 reached Conveyor
+        | Success: Always
+
+``GraspCell:``  
+----------------
+    Inspection robot 1 grasps a cell. If successful, `cellsQueued` is decremented by 1 and `IR1Grasping` is set to True.
+
+    Output
+        | Feedback: "IR1 grasped cell"
+        | Failure: Inspection robot is not at conveyor or no cells are queued.
+        | Success: Inspection robot was at conveyor, and successfully grasped a queued cell.
+
+``MoveToTester1:``  
+-------------------
+    Checks if `IR1Grasping` is True. If so and `IR1Location` is not "Tester 1", simulates movement and sets `IR1Location` to "Tester 1".
+
+    Output
+        | Feedback: Inspection robot 1 has reached/is at tester 1.
+        | Failure: Inspection robot doesn’t have a cell.
+        | Success: Inspection robot 1 is at tester 1.
+
+``MoveToTester2:``  
+-------------------
+    Checks if `IR1Grasping` is True. If so and `IR1Location` is not "Tester 2", simulates movement and sets `IR1Location` to "Tester 2".
+
+    Output
+        | Feedback: Inspection robot 1 has reached/is at tester 2.
+        | Failure: Inspection robot doesn’t have a cell.
+        | Success: Inspection robot 1 is at tester 2.
+
+``PlaceInTester:``  
+-------------------
+    Inspection robot 1 places the cell into whichever tester it is at. If tester 1, `FreeTesters` = "Tester 2". If tester 2, `FreeTesters` = "Tester 1".
+
+    Output
+        | Feedback: The tester that inspection robot 1 placed the cell into.
+        | Failure: Inspection robot 1 isn’t at a tester or doesn’t have a cell.
+        | Success: Inspection robot 1 successfully placed a cell into 1 of 2 testers.
+
+``Wait1Sec:``  
+----------------
+    Inspection robot 1 waits for 1 second.
+
+    Output
+        | Feedback: Completion of wait.
+        | Success: Always
