@@ -16,3 +16,25 @@ Below is the behavior tree structure followed in my code, each color indicates a
 <br><br>
 ![Behavior Tree](lib/Task1BehaviorTree.png)<br>
 [View on Figma](https://www.figma.com/board/FQbgSewBoVZuaahuNycCL8/NIST_ARIACMASTER?node-id=0-1&p=f&t=e7GGcnD3WUBGhm5T-0)
+
+## Quickstart
+
+_[Python 3.13+](https://www.python.org/downloads/) required_
+
+1. Update pip
+
+```bash
+python -m pip install --upgrade pip
+```
+
+2. Install project dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+3. Run Task #1
+
+```bash
+python ariacmaster/ariacmaster/task1/main.py
+```
