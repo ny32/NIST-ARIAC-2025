@@ -35,5 +35,7 @@ class TakeCurrentCellVoltage(py_trees.behaviour.Behaviour):
             Possible Values: 12.4, 12.5, 12.6, 12.7, 12.8, 12.9
             Not Allowed: 12.4V (16.7% probability of occurence)
             """
+            self.feedback_message = f"Voltage reading {WORLD.voltageReading}V taken from {WORLD.IR2TargetCell}"
+
             return py_trees.common.Status.SUCCESS
         return py_trees.common.Status.FAILURE
