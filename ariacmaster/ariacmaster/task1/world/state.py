@@ -1,7 +1,6 @@
 from datetime import datetime
 from core.ARIAC import Report
-from core.types import DoorStates, IRLocations, Testers, AGVs, AGVLocations, Cells, Slots
-
+from core.types import *
 class WorldState:
     def __init__(self):
         self.tick_count=0 # Counts ticks, not needed for ARIAC
@@ -24,6 +23,13 @@ class WorldState:
         self.filledAGV: int = -1
         self.AGVAtIntersection: int = -1
 
+        self.AR1Location: ARLocations = "Assembly"
+        self.AR1Attachment: ARAttachments = "VG2"
+
+        self.shellSlots = [2, # Positive 
+                           2 # Negative
+        ]
+
         self.AGVs: list[list] = [
             [3, # Gives a bit of a quick start to demo 
              "Inspection"], # AGV 1
@@ -31,6 +37,7 @@ class WorldState:
             [0, "Inspection"] # AGV 3
         ]
 
+        self.SUBMITTED_MODULES: int = 0
         self.startTime: datetime = datetime.now()
         
     def __str__(self):
@@ -41,9 +48,15 @@ class WorldState:
             f"Inspection Robot 1 Location: {self.IR1Location}\n"
             f"Inspection Robot 2 Location: {self.IR2Location}\n"
             f"Cells Queued for Inspection: {self.cellsQueued}\n"
+            f"Assembly Robot 1 Location: {self.AR1Location}\n"
+            f"Assembly Robot 1 Attachment: {self.AR1Attachment}\n"
             f"-------------------------------------------\n"
             f"Cells Disposed: {self.cellsDisposed}\n"
             f"Cells Kitted: {self.cellsKitted}\n"
+            f"Positive Module Shell Slots Filled: {2 - self.shellSlots[0]}\n"
+            f"Negative Module Shell Slots Filled: {2 - self.shellSlots[1]}\n"
+            f"-------------------------------------------\n"
+            f"Cells Submitted: {self.SUBMITTED_MODULES}\n"
         )
 
 

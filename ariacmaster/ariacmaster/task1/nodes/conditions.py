@@ -101,3 +101,15 @@ class CompetitionEnded(py_trees.behaviour.Behaviour):
             self.feedback_message = "Competition has ended."
             return py_trees.common.Status.SUCCESS
         return py_trees.common.Status.FAILURE
+
+class FreePositiveCells(py_trees.behaviour.Behaviour):
+    # Check if there are free slots for positive cells in the shell
+    def __init__(self, name="Check for free positive cell slots in shell"):
+        super().__init__(name)
+    def update(self):
+        if WORLD.shellSlots[0] > 0:
+            self.feedback_message = f"Free positive cell slots available: {WORLD.shellSlots[0]}"
+            return py_trees.common.Status.SUCCESS
+        else:
+            self.feedback_message = "No free positive cell slots available."
+            return py_trees.common.Status.FAILURE

@@ -1,11 +1,13 @@
 import py_trees
 import core.constants as constants
-import nodes.competition_behaviors as competition
+import nodes.competition_behaviors as env
 import nodes.inspection_behaviors as inspection_node
 import nodes.agv_behaviors as agv
 import nodes.inspection_robot_1 as IR1
 import nodes.inspection_robot_2 as IR2
 import nodes.conditions as condition
+import nodes.assembly_robot_1 as AR1
+
 def create():
     # Create the behavior tree:
     # Nodes without children...
@@ -124,6 +126,45 @@ def create():
         memory=False
     )
 
+    assembly_with_shells = py_trees.composites.Sequence(
+        name="Assembly with Shells",
+        memory=False
+    )
+
+    prepare_assembly = py_trees.composites.Sequence(
+        name="Prepare Assembly",
+        memory=False
+    )
+
+    place_per_polarity = py_trees.composites.Selector(
+        name="Place per Polarity",
+        memory=False
+    )
+
+    place_in_positive = py_trees.composites.Sequence(
+        name="Place in Positive Slot",
+        memory=False
+    )
+
+    place_in_negative = py_trees.composites.Sequence(
+        name="Place in Negative Slot",
+        memory=False
+    )
+
+    find_and_place_shell = py_trees.composites.Sequence(
+        name="Find and Place Shell",
+        memory=False
+    )
+
+    weld_module = py_trees.composites.Sequence(
+        name="Weld Module",
+        memory=False
+    )
+
+    flip_module = py_trees.composites.Sequence(
+        name="Flip Module",
+        memory=False
+    )
 
     # Decorators/Inverters added here w/Children
     wait_for_cell_arrival = py_trees.decorators.Retry(
@@ -170,9 +211,9 @@ def create():
 
     # Construct full tree now
     root.add_children([
-        competition.StartCompetition(),
+        env.StartCompetition(),
         short_circuit_comp,
-        competition.EndCompetition()
+        env.EndCompetition()
     ])
     short_circuit_comp.add_children([
         competition_ended,
@@ -184,6 +225,8 @@ def create():
         conveyor_pickup,
         voltage_inspection,
         agv_movement,
+        assembly_with_shells,
+        weld_module,
         condition.CompetitionEnded()
     ])
     inspection.add_children([
@@ -225,7 +268,7 @@ def create():
     ])
     voltage_inspection.add_children([
         wait_for_filled_tester,
-        competition.TakeCurrentCellVoltage(),
+        env.TakeCurrentCellVoltage(),
         IR2.MoveToCurrentCell(),
         IR2.GraspCell(),
         recycle_or_keep_cell_selector
@@ -279,5 +322,63 @@ def create():
         condition.AssemblyAGVSlotsEmpty(),
         agv.MoveAssemblyAGVToInspection()
     ])
+
+    assembly_with_shells.add_children([
+        prepare_assembly,
+        AR1.MoveToAGV(),
+        AR1.GrabAssemblyCell(),
+        AR1.PlaceIntoAGVCenter(),
+        AR1.ReGraspAssemblyCell(),
+        place_per_polarity,
+        AR1.MoveToVG2(),
+        AR1.AttachVG2(),
+        find_and_place_shell
+    ])
+
+    prepare_assembly.add_children([
+        env.SpawnNewShell(),
+        AR1.MoveToVG4(),
+        AR1.AttachVG4()
+    ])
+
+    place_per_polarity.add_children([
+        place_in_positive,
+        place_in_negative
+    ])
+
+    place_in_positive.add_children([
+        condition.FreePositiveCells(),
+        AR1.PlaceInPositiveCell()
+    ])
+
+    place_in_negative.add_children([
+        AR1.FlipGrabberOrientation(),
+        AR1.PlaceInNegativeCell()
+    ])
+
+    find_and_place_shell.add_children([
+        env.SpawnTopShell(),
+        env.CallForSensorDisturbances(),
+        AR1.MoveToDisturbance(),
+        AR1.GrabShell(),
+        AR1.MoveToModule(),
+        AR1.PlaceShellOnModule()
+    ])
+
+    weld_module.add_children([
+        env.MoveModuleToGantry(),
+        env.CallWeldService(),
+        flip_module,
+        env.CallWeldService(),
+        env.SUBMIT_MODULE()
+    ])
+
+    flip_module.add_children([
+        AR1.MoveToVG4(),
+        AR1.AttachVG4(),
+        AR1.MoveToWeldingModule(),
+        AR1.GraspModule(),
+        AR1.FlipGrabberOrientation(),
+        AR1.PlaceModuleOnConveyor()
+    ])
     return root
-        

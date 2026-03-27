@@ -8,3 +8,6 @@ AGVLocations = Literal["Inspection", "Assembly", "Shipping", "Recycling", "Inter
 Defects = Literal["None", "Dent", "Scratch", "Bulge"]
 Cells = Literal["Cell 1", "Cell 2", "None"]
 Slots = Literal[" ", "X"]
+
+ARLocations = Literal["Tool Change", "AGV", "Assembly", "Sensor Trigger", "Gantry"]
+ARAttachments = Literal["VG2", "VG4"]

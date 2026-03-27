@@ -39,3 +39,53 @@ class TakeCurrentCellVoltage(py_trees.behaviour.Behaviour):
 
             return py_trees.common.Status.SUCCESS
         return py_trees.common.Status.FAILURE
+    
+class SpawnNewShell(py_trees.behaviour.Behaviour):
+    def __init__(self,  name="Spawn New Shell"):
+        super().__init__(name)
+    def update(self):
+        time.sleep(1) # Time delay for shell spawn
+        self.feedback_message = "Spawned a new module shell"
+        WORLD.shellSlots = [2, 2] # Reset shell slots to full
+        return py_trees.common.Status.SUCCESS
+
+class SpawnTopShell(py_trees.behaviour.Behaviour):
+    def __init__(self, name="Spawn Top Shell"):
+        super().__init__(name)
+    def update(self):
+        time.sleep(1) # Time delay for shell spawn
+        self.feedback_message = "Spawned a new top shell"
+        # Randomly spawns in world, but won't impact read-only code
+        return py_trees.common.Status.SUCCESS
+
+class CallForSensorDisturbances(py_trees.behaviour.Behaviour):
+    def __init__(self, name="Call for Sensor Disturbances"):
+        super().__init__(name)
+    def update(self):
+        time.sleep(1) # Time delay for calling disturbances
+        self.feedback_message = "Called for sensor disturbances"
+        return py_trees.common.Status.SUCCESS
+
+class MoveModuleToGantry(py_trees.behaviour.Behaviour):
+    def __init__(self, name="Move Module to Gantry"):
+        super().__init__(name)
+    def update(self):
+        time.sleep(1) # Time delay for moving module to gantry
+        self.feedback_message = "Module moved to gantry"
+        return py_trees.common.Status.SUCCESS
+    
+class CallWeldService(py_trees.behaviour.Behaviour):
+    def __init__(self, name="Call Gantry Weld Service"):
+        super().__init__(name)
+    def update(self):
+        time.sleep(1) # Time delay for calling weld service
+        self.feedback_message = "Called gantry weld service"
+
+class SUBMIT_MODULE(py_trees.behaviour.Behaviour):
+    def __init__(self, name="Submit Module"):
+        super().__init__(name)
+    def update(self):
+        time.sleep(1) # Time delay for submitting module
+        WORLD.SUBMITTED_MODULES += 1
+        self.feedback_message = f"Submitted module #{WORLD.SUBMITTED_MODULES}"
+        return py_trees.common.Status.SUCCESS
