@@ -80,6 +80,7 @@ class CallWeldService(py_trees.behaviour.Behaviour):
     def update(self):
         time.sleep(1) # Time delay for calling weld service
         self.feedback_message = "Called gantry weld service"
+        return py_trees.common.Status.SUCCESS
 
 class SUBMIT_MODULE(py_trees.behaviour.Behaviour):
     def __init__(self, name="Submit Module"):

@@ -56,7 +56,7 @@ class WorldState:
             f"Positive Module Shell Slots Filled: {2 - self.shellSlots[0]}\n"
             f"Negative Module Shell Slots Filled: {2 - self.shellSlots[1]}\n"
             f"-------------------------------------------\n"
-            f"Cells Submitted: {self.SUBMITTED_MODULES}\n"
+            # f"Cells Submitted: {self.SUBMITTED_MODULES}\n"
         )
 
 

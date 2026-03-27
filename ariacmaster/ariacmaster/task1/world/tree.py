@@ -29,7 +29,7 @@ def create():
 
     inspection = py_trees.composites.Sequence(
         name="Inspection",
-        memory=True
+        memory=False
     )
 
     cell_check = py_trees.composites.Selector(
@@ -39,7 +39,7 @@ def create():
 
     conveyor_pickup = py_trees.composites.Sequence(
         name="Conveyor Pickup",
-        memory=True
+        memory=False
     )
 
     wait_for_queue = py_trees.composites.Selector(
@@ -69,7 +69,7 @@ def create():
 
     voltage_inspection = py_trees.composites.Sequence(
         name="Voltage Inspection",
-        memory=True
+        memory=False
     )
 
     check_testers_and_wait = py_trees.composites.Sequence(
@@ -109,12 +109,12 @@ def create():
 
     agv_movement = py_trees.composites.Selector(
         name="AGV Movement",
-        memory=True
+        memory=False
     )
 
     get_agv_to_assembly = py_trees.composites.Sequence(
         name="Get AGV to Assembly",
-        memory=True
+        memory=False
     )
 
     yield_to_assembly_agv = py_trees.composites.Sequence(
@@ -171,6 +171,11 @@ def create():
         name="Wait for Cell Arrival",
         child=wait_for_queue,
         num_failures=constants.NORMAL_RETRIES
+    )
+    fill_shells = py_trees.decorators.Retry(
+        name="Fill up shells",
+        child=place_per_polarity,
+        num_failures=1
     )
     not_queued_cell = py_trees.decorators.Inverter(
         name="Not Queued Cell",
@@ -323,13 +328,15 @@ def create():
         agv.MoveAssemblyAGVToInspection()
     ])
 
+
+
     assembly_with_shells.add_children([
         prepare_assembly,
         AR1.MoveToAGV(),
         AR1.GrabAssemblyCell(),
         AR1.PlaceIntoAGVCenter(),
         AR1.ReGraspAssemblyCell(),
-        place_per_polarity,
+        fill_shells,
         AR1.MoveToVG2(),
         AR1.AttachVG2(),
         find_and_place_shell
